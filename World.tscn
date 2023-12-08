@@ -1,7 +1,55 @@
-[gd_scene format=3 uid="uid://cwkxohm37urjd"]
+[gd_scene load_steps=8 format=3 uid="uid://cwkxohm37urjd"]
+
+[ext_resource type="Texture2D" uid="uid://ditbjcjyfovj" path="res://Assets/venice_sunset_1k.hdr" id="1_cao6d"]
+[ext_resource type="PackedScene" uid="uid://bg0is3pbfcx3h" path="res://Cabin.tscn" id="1_y443j"]
+[ext_resource type="Script" path="res://Pivot.gd" id="3_4y73t"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_l5dco"]
+panorama = ExtResource("1_cao6d")
+
+[sub_resource type="Sky" id="Sky_3dter"]
+sky_material = SubResource("PanoramaSkyMaterial_l5dco")
+
+[sub_resource type="Environment" id="Environment_d1ne0"]
+background_mode = 1
+background_color = Color(0.266667, 0.266667, 0.266667, 1)
+sky = SubResource("Sky_3dter")
+ambient_light_source = 3
+ambient_light_color = Color(0.372549, 0.129412, 0.85098, 1)
+ambient_light_sky_contribution = 0.5
+ambient_light_energy = 0.2
+tonemap_mode = 3
+ssr_enabled = true
+
+[sub_resource type="VoxelGIData" id="VoxelGIData_jj766"]
 
 [node name="World" type="Node3D"]
 
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_d1ne0")
+
 [node name="Marker3D" type="Marker3D" parent="."]
 
+[node name="Cabin" parent="Marker3D" instance=ExtResource("1_y443j")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 6, 2.08165e-12)
+
 [node name="Pivot" type="Node3D" parent="."]
+script = ExtResource("3_4y73t")
+
+[node name="Camera" type="Camera3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 6, 5)
+current = true
+
+[node name="VoxelGI" type="VoxelGI" parent="."]
+size = Vector3(30, 30, 30)
+data = SubResource("VoxelGIData_jj766")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.6471, 0.424905, -0.633022, -0.416198, 0.892539, 0.173648, 0.638781, 0.151095, 0.754407, -15, 10, 20)
+light_color = Color(0.921569, 0.407843, 0.0313726, 1)
+light_energy = 0.6
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.711, 4.333, 0.268)
+light_color = Color(0.772549, 0.737255, 0.427451, 1)
+omni_attenuation = 2.0
